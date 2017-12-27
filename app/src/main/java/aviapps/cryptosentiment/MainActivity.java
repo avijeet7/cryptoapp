@@ -1,5 +1,6 @@
 package aviapps.cryptosentiment;
 
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import aviapps.cryptosentiment.GetSet.Crypto;
 import aviapps.cryptosentiment.common.CryptoArrayAdapter;
+import aviapps.cryptosentiment.custom.CustomPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadComponents() {
 //        tv_m1 = (TextView) findViewById(R.id.tv_m1);
+
+        CustomPagerAdapter mCustomPagerAdapter = new CustomPagerAdapter(this);
+
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.viewPager);
+        mViewPager.setAdapter(mCustomPagerAdapter);
     }
 
     private void initVariables() {
