@@ -17,6 +17,12 @@
         <!--app:layout_constraintTop_toTopOf="parent"-->
         <!--android:visibility="gone" />-->
 
+    <TextView
+        android:id="@+id/tv_ticks"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="Test Tick"/>
+
     <ListView
         android:id="@+id/elements_list"
         android:layout_width="match_parent"
