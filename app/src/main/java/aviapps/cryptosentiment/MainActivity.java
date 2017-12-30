@@ -4,7 +4,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -20,7 +19,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import aviapps.cryptosentiment.GetSet.Crypto;
 import aviapps.cryptosentiment.common.CryptoArrayAdapter;
@@ -51,11 +49,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadComponents() {
-        tv_ticks = (TextView) findViewById(R.id.tv_ticks);
+        tv_ticks = findViewById(R.id.tv_ticks);
 
         CustomPagerAdapter mCustomPagerAdapter = new CustomPagerAdapter(this);
 
-        ViewPager mViewPager = (ViewPager) findViewById(R.id.viewPager);
+        ViewPager mViewPager = findViewById(R.id.viewPager);
         mViewPager.setAdapter(mCustomPagerAdapter);
     }
 
@@ -65,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setFlow() {
         adapter = new CryptoArrayAdapter(this, dataArray);
-        ListView listView = (ListView) findViewById(R.id.elements_list);
+        ListView listView = findViewById(R.id.elements_list);
         listView.setAdapter(adapter);
         getDataVolleyCall();
         start();
