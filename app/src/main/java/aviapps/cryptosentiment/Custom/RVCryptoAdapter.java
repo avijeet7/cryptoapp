@@ -44,6 +44,11 @@ public class RVCryptoAdapter extends RecyclerView.Adapter<RVCryptoAdapter.ViewHo
         notifyItemRemoved(position);
     }
 
+    public void update(int position, String txt) {
+        values.set(position, txt);
+        notifyItemChanged(position);
+    }
+
     // Provide a suitable constructor (depends on the kind of dataset)
     public RVCryptoAdapter(List<String> myDataset) {
         values = myDataset;
