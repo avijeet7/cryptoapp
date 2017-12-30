@@ -1,4 +1,4 @@
-package aviapps.cryptosentiment.common;
+package aviapps.cryptosentiment.Common;
 
 import android.content.Context;
 import android.view.LayoutInflater;

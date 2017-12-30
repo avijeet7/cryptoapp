@@ -1,8 +1,8 @@
-package aviapps.cryptosentiment;
+package aviapps.cryptosentiment.Screens;
 
+import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,15 +20,16 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import aviapps.cryptosentiment.Common.CryptoArrayAdapter;
+import aviapps.cryptosentiment.Custom.CustomPagerAdapter;
 import aviapps.cryptosentiment.GetSet.Crypto;
-import aviapps.cryptosentiment.common.CryptoArrayAdapter;
-import aviapps.cryptosentiment.custom.CustomPagerAdapter;
+import aviapps.cryptosentiment.R;
 import okhttp3.OkHttpClient;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity_OLD extends AppCompatActivity {
 
     private TextView tv_ticks;
     ArrayList<Crypto> dataArray;

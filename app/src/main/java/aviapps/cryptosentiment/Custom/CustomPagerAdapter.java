@@ -1,4 +1,4 @@
-package aviapps.cryptosentiment.custom;
+package aviapps.cryptosentiment.Custom;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
