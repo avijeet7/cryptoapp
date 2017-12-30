@@ -41,13 +41,10 @@ public class RVCryptoAdapter extends RecyclerView.Adapter<RVCryptoAdapter.ViewHo
 
     // Create new views (invoked by the layout manager)
     @Override
-    public RVCryptoAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                         int viewType) {
+    public RVCryptoAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
-        LayoutInflater inflater = LayoutInflater.from(
-                parent.getContext());
-        View v =
-                inflater.inflate(R.layout.listview, parent, false);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View v = inflater.inflate(R.layout.listview, parent, false);
         // set the view's size, margins, paddings and layout parameters
         ViewHolder vh = new ViewHolder(v);
         return vh;
@@ -59,7 +56,7 @@ public class RVCryptoAdapter extends RecyclerView.Adapter<RVCryptoAdapter.ViewHo
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         final JSONObject name = values.get(position);
-        holder.txtHeader.setText(name.optString("ltp"));
+        holder.txtHeader.setText(name.optString("symbol"));
         holder.txtHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,7 +64,9 @@ public class RVCryptoAdapter extends RecyclerView.Adapter<RVCryptoAdapter.ViewHo
             }
         });
 
-        holder.txtFooter.setText("Footer: " + name.optString("ltp"));
+        holder.txtFooter.setText(name.optString("chanId"));
+        holder.tv_ltp.setText(name.optString("ltp"));
+        holder.tv_pc.setText(name.optString("pc"));
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -80,16 +79,17 @@ public class RVCryptoAdapter extends RecyclerView.Adapter<RVCryptoAdapter.ViewHo
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public class ViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
-        public TextView txtHeader;
-        public TextView txtFooter;
         public View layout;
+        // each data item is just a string in this case
+        TextView txtHeader, txtFooter, tv_ltp, tv_pc;
 
-        public ViewHolder(View v) {
+        ViewHolder(View v) {
             super(v);
             layout = v;
             txtHeader = v.findViewById(R.id.firstLine);
             txtFooter = v.findViewById(R.id.secondLine);
+            tv_ltp = v.findViewById(R.id.tv_second);
+            tv_pc = v.findViewById(R.id.tv_first);
         }
     }
 }

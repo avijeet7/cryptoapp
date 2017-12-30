@@ -28,13 +28,13 @@ import okio.ByteString;
 
 public class MarketFragment extends Fragment {
 
+    private static final int NORMAL_CLOSURE_STATUS = 1000;
     private RecyclerView recyclerView;
     private RVCryptoAdapter mAdapter;
     private List<JSONObject> input;
     private WebSocket ws;
     private EchoWebSocketListener listener;
     private long tick_count = 0;
-    private HashMap<String, String> channerMapper;
 
     public MarketFragment() {
     }
@@ -53,14 +53,8 @@ public class MarketFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         input = new ArrayList<>();
-//        for (int i = 0; i < 5; i++) {
-//            input.add("Test" + i);
-//        }
-
-        channerMapper = new HashMap<>();
 
         JSONObject main_json = new JSONObject();
-
         try {
             main_json.put("chanId", "");
             main_json.put("symbol", "");
@@ -70,6 +64,7 @@ public class MarketFragment extends Fragment {
             e.printStackTrace();
         }
 
+        input.add(main_json);
         input.add(main_json);
         mAdapter = new RVCryptoAdapter(input);
         recyclerView.setAdapter(mAdapter);
@@ -93,19 +88,15 @@ public class MarketFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        ws.close(1000, "Bye");
+        ws.close(NORMAL_CLOSURE_STATUS, "Bye");
     }
 
     private final class EchoWebSocketListener extends WebSocketListener {
-        private static final int NORMAL_CLOSURE_STATUS = 1000;
 
         @Override
         public void onOpen(WebSocket webSocket, okhttp3.Response response) {
             webSocket.send("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"symbol\":\"tBTCUSD\"}");
-//            webSocket.send("{\"event\":\"subscribe\",\"channel\":\"book\",\"pair\":\"BTCUSD\",\"prec\":\"P0\"}");
-//            webSocket.send("What's up ?");
-//            webSocket.send(ByteString.decodeHex("deadbeef"));
-//            webSocket.close(NORMAL_CLOSURE_STATUS, "Goodbye !");
+            webSocket.send("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"symbol\":\"tETHUSD\"}");
         }
 
         @Override
@@ -141,7 +132,7 @@ public class MarketFragment extends Fragment {
             try {
                 JSONObject jsonObject = new JSONObject(txt);
                 if (jsonObject.optString("event").equalsIgnoreCase("subscribed")) {
-                    channerMapper.put(jsonObject.optString("chanId"), jsonObject.optString("symbol"));
+                    input.get(0).putOpt("symbol", jsonObject.optString("symbol"));
                     input.get(0).putOpt("chanId", jsonObject.optString("chanId"));
                 }
             } catch (Exception ex) {
@@ -151,19 +142,21 @@ public class MarketFragment extends Fragment {
             try {
                 String tick = txt.replaceAll("[\\[\\]]", "");
                 String[] data = tick.split(",");
-//                JSONObject temp = main_json.getJSONObject(channerMapper.get(data[0]));
-                input.get(0).putOpt("ltp", data[7]);
+                if (!data[1].equalsIgnoreCase("\"hb\"")) {
+                    input.get(0).putOpt("ltp", data[7]);
+                    input.get(0).putOpt("pc", data[6]);
+
+                    final JSONObject finalLastPrice = input.get(0);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAdapter.update(0, finalLastPrice);
+                        }
+                    });
+                }
             } catch (Exception ex) {
                 Log.e("OUTPUT", ex.getMessage());
             }
         }
-
-        final JSONObject finalLastPrice = input.get(0);
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mAdapter.update(0, finalLastPrice);
-            }
-        });
     }
 }
