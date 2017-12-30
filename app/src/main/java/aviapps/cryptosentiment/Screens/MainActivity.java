@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         // load the store fragment by default
         toolbar = getSupportActionBar();
         toolbar.setTitle("Overview");
-        loadFragment(new StoreFragment());
+        loadFragment(new OverviewFragment());
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -38,12 +38,12 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_shop:
                     toolbar.setTitle("Overview");
-                    fragment = new StoreFragment();
+                    fragment = new OverviewFragment();
                     loadFragment(fragment);
                     return true;
                 case R.id.navigation_gifts:
                     toolbar.setTitle("Market");
-                    fragment = new GiftsFragment();
+                    fragment = new MarketFragment();
                     loadFragment(fragment);
                     return true;
                 case R.id.navigation_cart:

@@ -18,17 +18,17 @@ import aviapps.cryptosentiment.R;
  * Created by Avijeet on 30-Dec-17.
  */
 
-public class GiftsFragment extends Fragment {
+public class MarketFragment extends Fragment {
 
     private RecyclerView recyclerView;
 
-    public GiftsFragment() {
+    public MarketFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.gifts_fragment, container, false);
+        View view = inflater.inflate(R.layout.market_fragment, container, false);
         recyclerView = view.findViewById(R.id.rv_crypto);
         init();
         return view;

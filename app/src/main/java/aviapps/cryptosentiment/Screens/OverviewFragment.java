@@ -12,9 +12,9 @@ import aviapps.cryptosentiment.R;
  * Created by Avijeet on 30-Dec-17.
  */
 
-public class StoreFragment extends Fragment {
+public class OverviewFragment extends Fragment {
 
-    public StoreFragment() {
+    public OverviewFragment() {
         // Required empty public constructor
     }
 
@@ -22,6 +22,6 @@ public class StoreFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.store_fragment, container, false);
+        return inflater.inflate(R.layout.overview_fragment, container, false);
     }
 }
