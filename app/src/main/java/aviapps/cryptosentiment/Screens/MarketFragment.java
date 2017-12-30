@@ -9,7 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import aviapps.cryptosentiment.Custom.RVCryptoAdapter;
@@ -27,8 +30,11 @@ public class MarketFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private RVCryptoAdapter mAdapter;
-    private List<String> input;
+    private List<JSONObject> input;
     private WebSocket ws;
+    private EchoWebSocketListener listener;
+    private long tick_count = 0;
+    private HashMap<String, String> channerMapper;
 
     public MarketFragment() {
     }
@@ -47,9 +53,24 @@ public class MarketFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         input = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            input.add("Test" + i);
+//        for (int i = 0; i < 5; i++) {
+//            input.add("Test" + i);
+//        }
+
+        channerMapper = new HashMap<>();
+
+        JSONObject main_json = new JSONObject();
+
+        try {
+            main_json.put("chanId", "");
+            main_json.put("symbol", "");
+            main_json.put("ltp", "");
+            main_json.put("pc", "");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+        input.add(main_json);
         mAdapter = new RVCryptoAdapter(input);
         recyclerView.setAdapter(mAdapter);
 
@@ -59,7 +80,7 @@ public class MarketFragment extends Fragment {
     private void startSockets() {
         OkHttpClient client = new OkHttpClient();
         okhttp3.Request request = new okhttp3.Request.Builder().url("wss://api.bitfinex.com/ws/2").build();
-        EchoWebSocketListener listener = new EchoWebSocketListener();
+        listener = new EchoWebSocketListener();
         ws = client.newWebSocket(request, listener);
         client.dispatcher().executorService().shutdown();
     }
@@ -90,32 +111,58 @@ public class MarketFragment extends Fragment {
         @Override
         public void onMessage(WebSocket webSocket, String text) {
             Log.d("TICK: ", text);
+            tick_count++;
             output(text);
         }
 
         @Override
         public void onMessage(WebSocket webSocket, ByteString bytes) {
             output("Receiving bytes : " + bytes.hex());
+            tick_count++;
         }
 
         @Override
         public void onClosing(WebSocket webSocket, int code, String reason) {
             webSocket.close(NORMAL_CLOSURE_STATUS, null);
             output("Closing : " + code + " / " + reason);
+            Log.d("TICK: ", reason);
+            tick_count = 0;
         }
 
         @Override
         public void onFailure(WebSocket webSocket, Throwable t, okhttp3.Response response) {
             output("Error : " + t.getMessage());
+            tick_count = 0;
         }
     }
 
     private void output(final String txt) {
+        if (tick_count <= 2) {
+            try {
+                JSONObject jsonObject = new JSONObject(txt);
+                if (jsonObject.optString("event").equalsIgnoreCase("subscribed")) {
+                    channerMapper.put(jsonObject.optString("chanId"), jsonObject.optString("symbol"));
+                    input.get(0).putOpt("chanId", jsonObject.optString("chanId"));
+                }
+            } catch (Exception ex) {
+                Log.e("OUTPUT", ex.getMessage());
+            }
+        } else {
+            try {
+                String tick = txt.replaceAll("[\\[\\]]", "");
+                String[] data = tick.split(",");
+//                JSONObject temp = main_json.getJSONObject(channerMapper.get(data[0]));
+                input.get(0).putOpt("ltp", data[7]);
+            } catch (Exception ex) {
+                Log.e("OUTPUT", ex.getMessage());
+            }
+        }
 
+        final JSONObject finalLastPrice = input.get(0);
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mAdapter.update(1, txt);
+                mAdapter.update(0, finalLastPrice);
             }
         });
     }
