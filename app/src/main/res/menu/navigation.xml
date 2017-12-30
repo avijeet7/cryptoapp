@@ -4,21 +4,21 @@
     <item
         android:id="@+id/navigation_shop"
         android:icon="@drawable/first"
-        android:title="@string/title_shop" />
+        android:title="@string/title_first" />
 
     <item
         android:id="@+id/navigation_gifts"
         android:icon="@drawable/second"
-        android:title="@string/title_gifts" />
+        android:title="@string/title_second" />
 
     <item
         android:id="@+id/navigation_cart"
         android:icon="@drawable/third"
-        android:title="@string/title_cart" />
+        android:title="@string/title_third" />
 
     <item
         android:id="@+id/navigation_profile"
         android:icon="@drawable/fourth"
-        android:title="@string/title_profile" />
+        android:title="@string/title_fourth" />
 
 </menu>
