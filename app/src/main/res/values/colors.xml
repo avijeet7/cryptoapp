@@ -4,4 +4,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="bgBottomNavigation">#303F9F</color>
+    <color name="colorListViewBackgroundDark">#060818</color>
+    <color name="colorTextLight">#ffffff</color>
+    <color name="colorPositiveGreen">#002300</color>
+    <color name="colorNegativeRed">#350000</color>
 </resources>

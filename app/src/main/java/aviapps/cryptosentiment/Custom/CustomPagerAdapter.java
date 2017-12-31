@@ -20,10 +20,10 @@ public class CustomPagerAdapter extends PagerAdapter {
     LayoutInflater mLayoutInflater;
 
     int[] mResources = {
-            R.drawable.first,
-            R.drawable.second,
-            R.drawable.third,
-            R.drawable.fourth
+            R.drawable.ic_overview,
+            R.drawable.ic_store,
+            R.drawable.ic_sentiment,
+            R.drawable.ic_profile
     };
 
     public CustomPagerAdapter(Context context) {

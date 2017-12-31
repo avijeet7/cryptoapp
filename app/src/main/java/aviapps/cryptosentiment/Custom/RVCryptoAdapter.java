@@ -1,9 +1,12 @@
 package aviapps.cryptosentiment.Custom;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
@@ -19,10 +22,12 @@ import aviapps.cryptosentiment.R;
 
 public class RVCryptoAdapter extends RecyclerView.Adapter<RVCryptoAdapter.ViewHolder> {
     private List<GetSetStream> values;
+    private Context context;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public RVCryptoAdapter(List<GetSetStream> myData) {
+    public RVCryptoAdapter(List<GetSetStream> myData, Context context) {
         values = myData;
+        this.context = context;
     }
 
     public void add(int position, GetSetStream item) {
@@ -57,7 +62,7 @@ public class RVCryptoAdapter extends RecyclerView.Adapter<RVCryptoAdapter.ViewHo
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         final GetSetStream object = values.get(position);
-        holder.txtHeader.setText(object.getSymbol());
+        holder.txtHeader.setText(object.getPair());
         holder.txtHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,6 +77,24 @@ public class RVCryptoAdapter extends RecyclerView.Adapter<RVCryptoAdapter.ViewHo
         else if (object.getLtp() > 100)
             ltpformat = new DecimalFormat("#.##");
 
+        if (object.getPc() < 0) {
+            holder.layout.setBackgroundColor(context.getResources().getColor(R.color.colorNegativeRed));
+        } else {
+            holder.layout.setBackgroundColor(context.getResources().getColor(R.color.colorPositiveGreen));
+        }
+
+        String img_name = object.getPair();
+        img_name = img_name.replace("USD", "");
+        img_name = img_name.toLowerCase();
+
+        // Handling special cases
+        if (img_name.equalsIgnoreCase("qtm")) {
+            img_name = "qtum";
+        }
+
+        int id = context.getResources().getIdentifier(img_name, "drawable", context.getPackageName());
+
+        holder.iv_main.setImageResource(id);
         holder.txtFooter.setText("bitfinex");
         holder.tv_ltp.setText(ltpformat.format(object.getLtp()));
         holder.tv_pc.setText(df.format(object.getPc()));
@@ -90,6 +113,7 @@ public class RVCryptoAdapter extends RecyclerView.Adapter<RVCryptoAdapter.ViewHo
         public View layout;
         // each data item is just a string in this case
         TextView txtHeader, txtFooter, tv_ltp, tv_pc;
+        ImageView iv_main;
 
         ViewHolder(View v) {
             super(v);
@@ -98,6 +122,7 @@ public class RVCryptoAdapter extends RecyclerView.Adapter<RVCryptoAdapter.ViewHo
             txtFooter = v.findViewById(R.id.secondLine);
             tv_ltp = v.findViewById(R.id.tv_second);
             tv_pc = v.findViewById(R.id.tv_first);
+            iv_main = v.findViewById(R.id.iv_main);
         }
     }
 }

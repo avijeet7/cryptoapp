@@ -36,17 +36,17 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             Fragment fragment;
             switch (item.getItemId()) {
-                case R.id.navigation_shop:
+                case R.id.navigation_overview:
                     toolbar.setTitle("Overview");
                     fragment = new OverviewFragment();
                     loadFragment(fragment);
                     return true;
-                case R.id.navigation_gifts:
+                case R.id.navigation_market:
                     toolbar.setTitle("Market");
                     fragment = new MarketFragment();
                     loadFragment(fragment);
                     return true;
-                case R.id.navigation_cart:
+                case R.id.navigation_sentiment:
                     toolbar.setTitle("Sentiment");
 //                    fragment = new CartFragment();
 //                    loadFragment(fragment);

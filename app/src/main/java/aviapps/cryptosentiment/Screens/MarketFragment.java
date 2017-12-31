@@ -55,7 +55,7 @@ public class MarketFragment extends Fragment {
         input = new ArrayList<>();
         channelMapper = new HashMap<>();
 
-        mAdapter = new RVCryptoAdapter(input);
+        mAdapter = new RVCryptoAdapter(input, getContext());
         recyclerView.setAdapter(mAdapter);
     }
 
@@ -103,6 +103,7 @@ public class MarketFragment extends Fragment {
                             GetSetStream row = new GetSetStream();
                             row.setChanId(jsonObject.optInt("chanId", -1));
                             row.setSymbol(jsonObject.optString("symbol", ""));
+                            row.setPair(jsonObject.optString("pair", ""));
                             row.setLtp(-1);
                             row.setPc(-1);
 

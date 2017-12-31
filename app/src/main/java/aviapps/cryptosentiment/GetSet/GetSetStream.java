@@ -8,6 +8,7 @@ public class GetSetStream {
     private double ltp = -1;
     private double pc = -1;
     private String symbol = "";
+    private String pair = "";
     private int chanId = -1;
 
     public double getLtp() {
@@ -40,5 +41,13 @@ public class GetSetStream {
 
     public void setChanId(int chanId) {
         this.chanId = chanId;
+    }
+
+    public String getPair() {
+        return pair;
+    }
+
+    public void setPair(String pair) {
+        this.pair = pair;
     }
 }

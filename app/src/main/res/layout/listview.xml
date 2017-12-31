@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
+    android:layout_marginTop="2dp"
     android:baselineAligned="false"
     android:orientation="horizontal"
     android:padding="6dip">
@@ -13,27 +14,27 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/icon"
+            android:id="@+id/iv_main"
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentTop="true"
             android:layout_marginEnd="6dip"
             android:layout_marginRight="6dip"
-            android:contentDescription="@string/null_string"
-            android:src="@mipmap/ic_launcher" />
+            android:contentDescription="@string/null_string" />
 
         <TextView
             android:id="@+id/secondLine"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@id/icon"
-            android:layout_toRightOf="@id/icon"
+            android:layout_toEndOf="@id/iv_main"
+            android:layout_toRightOf="@id/iv_main"
             android:ellipsize="marquee"
             android:paddingBottom="5dp"
             android:singleLine="true"
             android:text="@string/null_string"
+            android:textColor="@color/colorTextLight"
             android:textSize="12sp" />
 
         <TextView
@@ -45,11 +46,12 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_alignWithParentIfMissing="true"
-            android:layout_toEndOf="@id/icon"
-            android:layout_toRightOf="@id/icon"
+            android:layout_toEndOf="@id/iv_main"
+            android:layout_toRightOf="@id/iv_main"
             android:gravity="center_vertical"
             android:maxLines="1"
             android:text="@string/null_string"
+            android:textColor="@color/colorTextLight"
             android:textSize="16sp" />
 
     </RelativeLayout>
@@ -72,6 +74,7 @@
             android:gravity="end"
             android:singleLine="true"
             android:text="@string/null_string"
+            android:textColor="@color/colorTextLight"
             android:textSize="12sp" />
 
         <TextView
@@ -87,6 +90,7 @@
             android:gravity="end"
             android:maxLines="1"
             android:text="@string/null_string"
+            android:textColor="@color/colorTextLight"
             android:textSize="16sp" />
 
     </RelativeLayout>
