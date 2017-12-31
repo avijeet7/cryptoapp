@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -30,11 +31,12 @@ import aviapps.cryptosentiment.R;
 
 public class MarketFragment extends Fragment {
 
-    HashMap<String, Integer> channelMapper;
+    private HashMap<String, Integer> channelMapper;
     private RecyclerView recyclerView;
     private RVCryptoAdapter mAdapter;
     private List<GetSetStream> input;
     private CustomWebSocket ws;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public MarketFragment() {
     }
@@ -44,6 +46,7 @@ public class MarketFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.market_fragment, container, false);
         recyclerView = view.findViewById(R.id.rv_crypto);
+        mSwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         init();
         return view;
     }
@@ -57,12 +60,19 @@ public class MarketFragment extends Fragment {
 
         mAdapter = new RVCryptoAdapter(input, getContext());
         recyclerView.setAdapter(mAdapter);
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshItems();
+            }
+        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        startSockets();
+        refreshItems();
     }
 
     @Override
@@ -71,9 +81,20 @@ public class MarketFragment extends Fragment {
         try {
             getContext().unregisterReceiver(receiver);
             ws.close();
+            input.clear();
         } catch (Exception ex) {
             Log.e("Pause", ex.getMessage());
         }
+    }
+
+    void refreshItems() {
+        input.clear();
+        startSockets();
+        onItemsLoadComplete();
+    }
+
+    void onItemsLoadComplete() {
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     private void startSockets() {
