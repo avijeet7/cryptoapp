@@ -90,6 +90,11 @@ public class MarketFragment extends Fragment {
             if (msg.equalsIgnoreCase("{\"event\":\"info\",\"version\":2}")) {
                 ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"symbol\":\"tBTCUSD\"}");
                 ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"symbol\":\"tETHUSD\"}");
+                ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"symbol\":\"tLTCUSD\"}");
+                ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"symbol\":\"tXRPUSD\"}");
+                ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"symbol\":\"tXMRUSD\"}");
+                ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"symbol\":\"tIOTAUSD\"}");
+                ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"symbol\":\"tQTMUSD\"}");
             } else {
                 if (msg.startsWith("{")) {
                     try {

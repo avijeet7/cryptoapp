@@ -4,4 +4,5 @@
     <string name="title_second">Market</string>
     <string name="title_third">Sentiment</string>
     <string name="title_fourth">Profile</string>
+    <string name="null_string">--</string>
 </resources>

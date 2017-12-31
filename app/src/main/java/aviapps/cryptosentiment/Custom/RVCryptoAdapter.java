@@ -63,7 +63,7 @@ public class RVCryptoAdapter extends RecyclerView.Adapter<RVCryptoAdapter.ViewHo
             }
         });
 
-//        holder.txtFooter.setText(name.getChanId());
+        holder.txtFooter.setText("bitfinex");
         holder.tv_ltp.setText(String.valueOf(name.getLtp()));
         holder.tv_pc.setText(String.valueOf(name.getPc()));
     }
