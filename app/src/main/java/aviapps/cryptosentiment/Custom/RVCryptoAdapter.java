@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import java.text.DecimalFormat;
 import java.util.List;
-import java.util.Locale;
 
 import aviapps.cryptosentiment.GetSet.GetSetStream;
 import aviapps.cryptosentiment.R;
@@ -79,8 +78,10 @@ public class RVCryptoAdapter extends RecyclerView.Adapter<RVCryptoAdapter.ViewHo
 
         if (object.getPc() < 0) {
             holder.layout.setBackgroundColor(context.getResources().getColor(R.color.colorNegativeRed));
+            holder.tv_pc.setTextColor(Color.RED);
         } else {
             holder.layout.setBackgroundColor(context.getResources().getColor(R.color.colorPositiveGreen));
+            holder.tv_pc.setTextColor(Color.GREEN);
         }
 
         String img_name = object.getPair();
@@ -96,8 +97,8 @@ public class RVCryptoAdapter extends RecyclerView.Adapter<RVCryptoAdapter.ViewHo
 
         holder.iv_main.setImageResource(id);
         holder.txtFooter.setText("bitfinex");
-        holder.tv_ltp.setText(ltpformat.format(object.getLtp()));
-        holder.tv_pc.setText(df.format(object.getPc()));
+        holder.tv_ltp.setText("$ " + ltpformat.format(object.getLtp()));
+        holder.tv_pc.setText(df.format(object.getPc()) + " %");
     }
 
     // Return the size of your dataset (invoked by the layout manager)
