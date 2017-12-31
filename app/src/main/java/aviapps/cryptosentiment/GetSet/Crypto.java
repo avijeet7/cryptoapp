@@ -1,7 +1,7 @@
 package aviapps.cryptosentiment.GetSet;
 
-/**
- * Created by avije on 14-Dec-17.
+/*
+ * Created by Avijeet on 14-Dec-17.
  */
 
 public class Crypto {

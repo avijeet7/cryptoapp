@@ -21,6 +21,7 @@ import java.util.List;
 
 import aviapps.cryptosentiment.Custom.CustomWebSocket;
 import aviapps.cryptosentiment.Custom.RVCryptoAdapter;
+import aviapps.cryptosentiment.GetSet.GetSetStream;
 import aviapps.cryptosentiment.R;
 
 /*
@@ -32,7 +33,7 @@ public class MarketFragment extends Fragment {
     HashMap<String, Integer> channelMapper;
     private RecyclerView recyclerView;
     private RVCryptoAdapter mAdapter;
-    private List<JSONObject> input;
+    private List<GetSetStream> input;
     private CustomWebSocket ws;
 
     public MarketFragment() {
@@ -54,18 +55,6 @@ public class MarketFragment extends Fragment {
         input = new ArrayList<>();
         channelMapper = new HashMap<>();
 
-        JSONObject main_json = new JSONObject();
-        try {
-            main_json.put("chanId", "");
-            main_json.put("symbol", "");
-            main_json.put("ltp", "");
-            main_json.put("pc", "");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        input.add(main_json);
-        input.add(main_json);
         mAdapter = new RVCryptoAdapter(input);
         recyclerView.setAdapter(mAdapter);
     }
@@ -106,18 +95,21 @@ public class MarketFragment extends Fragment {
                     try {
                         JSONObject jsonObject = new JSONObject(msg);
                         if (jsonObject.optString("event").equalsIgnoreCase("subscribed")) {
-                            int id = 0;
-                            switch (jsonObject.optString("symbol")) {
-                                case "tBTCUSD":
-                                    id = 0;
-                                    break;
-                                case "tETHUSD":
-                                    id = 1;
-                                    break;
+                            GetSetStream row = new GetSetStream();
+                            row.setChanId(jsonObject.optInt("chanId", -1));
+                            row.setSymbol(jsonObject.optString("symbol", ""));
+                            row.setLtp(-1);
+                            row.setPc(-1);
+
+                            input.add(row);
+                            mAdapter.notifyDataSetChanged();
+
+                            int position = -1;
+                            for (int i=0; i<input.size(); i++) {
+                                if (input.get(i).getSymbol().equalsIgnoreCase(jsonObject.optString("symbol")))
+                                    position = i;
                             }
-                            input.get(id).put("symbol", jsonObject.optString("symbol"));
-                            input.get(id).put("chanId", jsonObject.optString("chanId"));
-                            channelMapper.put(jsonObject.optString("chanId"), id);
+                            channelMapper.put(jsonObject.optString("chanId"), position);
                         }
                     } catch (Exception ex) {
                         Log.e("OUTPUT", ex.getMessage());
@@ -128,14 +120,14 @@ public class MarketFragment extends Fragment {
                         String[] data = tick.split(",");
                         if (!data[1].equalsIgnoreCase("\"hb\"")) {
                             final int position = channelMapper.get(data[0]);
-                            input.get(position).put("ltp", data[7]);
-                            input.get(position).put("pc", data[6]);
-
-                            final JSONObject finalLastPrice = input.get(position);
+                            GetSetStream lastUpdate = input.get(position);
+                            lastUpdate.setLtp(Double.valueOf(data[7]));
+                            lastUpdate.setPc(Double.valueOf(data[6]) * 100);
+                            final GetSetStream finalLastUpdate = lastUpdate;
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mAdapter.update(position, finalLastPrice);
+                                    mAdapter.update(position, finalLastUpdate);
                                 }
                             });
                         }

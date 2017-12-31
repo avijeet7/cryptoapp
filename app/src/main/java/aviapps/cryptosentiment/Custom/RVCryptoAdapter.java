@@ -6,10 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.json.JSONObject;
-
 import java.util.List;
 
+import aviapps.cryptosentiment.GetSet.GetSetStream;
 import aviapps.cryptosentiment.R;
 
 /*
@@ -17,14 +16,14 @@ import aviapps.cryptosentiment.R;
  */
 
 public class RVCryptoAdapter extends RecyclerView.Adapter<RVCryptoAdapter.ViewHolder> {
-    private List<JSONObject> values;
+    private List<GetSetStream> values;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public RVCryptoAdapter(List<JSONObject> myData) {
+    public RVCryptoAdapter(List<GetSetStream> myData) {
         values = myData;
     }
 
-    public void add(int position, JSONObject item) {
+    public void add(int position, GetSetStream item) {
         values.add(position, item);
         notifyItemInserted(position);
     }
@@ -34,7 +33,7 @@ public class RVCryptoAdapter extends RecyclerView.Adapter<RVCryptoAdapter.ViewHo
         notifyItemRemoved(position);
     }
 
-    public void update(int position, JSONObject tick) {
+    public void update(int position, GetSetStream tick) {
         values.set(position, tick);
         notifyItemChanged(position);
     }
@@ -55,8 +54,8 @@ public class RVCryptoAdapter extends RecyclerView.Adapter<RVCryptoAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        final JSONObject name = values.get(position);
-        holder.txtHeader.setText(name.optString("symbol"));
+        final GetSetStream name = values.get(position);
+        holder.txtHeader.setText(name.getSymbol());
         holder.txtHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,9 +63,9 @@ public class RVCryptoAdapter extends RecyclerView.Adapter<RVCryptoAdapter.ViewHo
             }
         });
 
-        holder.txtFooter.setText(name.optString("chanId"));
-        holder.tv_ltp.setText(name.optString("ltp"));
-        holder.tv_pc.setText(name.optString("pc"));
+//        holder.txtFooter.setText(name.getChanId());
+        holder.tv_ltp.setText(String.valueOf(name.getLtp()));
+        holder.tv_pc.setText(String.valueOf(name.getPc()));
     }
 
     // Return the size of your dataset (invoked by the layout manager)
