@@ -6,7 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Locale;
 
 import aviapps.cryptosentiment.GetSet.GetSetStream;
 import aviapps.cryptosentiment.R;
@@ -54,8 +56,8 @@ public class RVCryptoAdapter extends RecyclerView.Adapter<RVCryptoAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        final GetSetStream name = values.get(position);
-        holder.txtHeader.setText(name.getSymbol());
+        final GetSetStream object = values.get(position);
+        holder.txtHeader.setText(object.getSymbol());
         holder.txtHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,9 +65,16 @@ public class RVCryptoAdapter extends RecyclerView.Adapter<RVCryptoAdapter.ViewHo
             }
         });
 
+        DecimalFormat df = new DecimalFormat("#.##");
+        DecimalFormat ltpformat = new DecimalFormat("#.####");
+        if (object.getLtp() > 10000)
+            ltpformat = new DecimalFormat("#");
+        else if (object.getLtp() > 100)
+            ltpformat = new DecimalFormat("#.##");
+
         holder.txtFooter.setText("bitfinex");
-        holder.tv_ltp.setText(String.valueOf(name.getLtp()));
-        holder.tv_pc.setText(String.valueOf(name.getPc()));
+        holder.tv_ltp.setText(ltpformat.format(object.getLtp()));
+        holder.tv_pc.setText(df.format(object.getPc()));
     }
 
     // Return the size of your dataset (invoked by the layout manager)
