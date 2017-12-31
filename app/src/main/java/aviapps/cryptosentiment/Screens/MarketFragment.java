@@ -1,7 +1,11 @@
 package aviapps.cryptosentiment.Screens;
 
-import android.support.v4.app.Fragment;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,12 +19,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import aviapps.cryptosentiment.Custom.CustomWebSocket;
 import aviapps.cryptosentiment.Custom.RVCryptoAdapter;
 import aviapps.cryptosentiment.R;
-import okhttp3.OkHttpClient;
-import okhttp3.WebSocket;
-import okhttp3.WebSocketListener;
-import okio.ByteString;
 
 /*
  * Created by Avijeet on 30-Dec-17.
@@ -28,13 +29,11 @@ import okio.ByteString;
 
 public class MarketFragment extends Fragment {
 
-    private static final int NORMAL_CLOSURE_STATUS = 1000;
+    HashMap<String, Integer> channelMapper;
     private RecyclerView recyclerView;
     private RVCryptoAdapter mAdapter;
     private List<JSONObject> input;
-    private WebSocket ws;
-    private EchoWebSocketListener listener;
-    private long tick_count = 0;
+    private CustomWebSocket ws;
 
     public MarketFragment() {
     }
@@ -53,6 +52,7 @@ public class MarketFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         input = new ArrayList<>();
+        channelMapper = new HashMap<>();
 
         JSONObject main_json = new JSONObject();
         try {
@@ -68,95 +68,82 @@ public class MarketFragment extends Fragment {
         input.add(main_json);
         mAdapter = new RVCryptoAdapter(input);
         recyclerView.setAdapter(mAdapter);
-
-        startSockets();
-    }
-
-    private void startSockets() {
-        OkHttpClient client = new OkHttpClient();
-        okhttp3.Request request = new okhttp3.Request.Builder().url("wss://api.bitfinex.com/ws/2").build();
-        listener = new EchoWebSocketListener();
-        ws = client.newWebSocket(request, listener);
-        client.dispatcher().executorService().shutdown();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        startSockets();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        ws.close(NORMAL_CLOSURE_STATUS, "Bye");
-    }
-
-    private final class EchoWebSocketListener extends WebSocketListener {
-
-        @Override
-        public void onOpen(WebSocket webSocket, okhttp3.Response response) {
-            webSocket.send("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"symbol\":\"tBTCUSD\"}");
-            webSocket.send("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"symbol\":\"tETHUSD\"}");
-        }
-
-        @Override
-        public void onMessage(WebSocket webSocket, String text) {
-            Log.d("TICK: ", text);
-            tick_count++;
-            output(text);
-        }
-
-        @Override
-        public void onMessage(WebSocket webSocket, ByteString bytes) {
-            output("Receiving bytes : " + bytes.hex());
-            tick_count++;
-        }
-
-        @Override
-        public void onClosing(WebSocket webSocket, int code, String reason) {
-            webSocket.close(NORMAL_CLOSURE_STATUS, null);
-            output("Closing : " + code + " / " + reason);
-            Log.d("TICK: ", reason);
-            tick_count = 0;
-        }
-
-        @Override
-        public void onFailure(WebSocket webSocket, Throwable t, okhttp3.Response response) {
-            output("Error : " + t.getMessage());
-            tick_count = 0;
+        try {
+            getContext().unregisterReceiver(receiver);
+            ws.close();
+        } catch (Exception ex) {
+            Log.e("Pause", ex.getMessage());
         }
     }
 
-    private void output(final String txt) {
-        if (tick_count <= 2) {
-            try {
-                JSONObject jsonObject = new JSONObject(txt);
-                if (jsonObject.optString("event").equalsIgnoreCase("subscribed")) {
-                    input.get(0).putOpt("symbol", jsonObject.optString("symbol"));
-                    input.get(0).putOpt("chanId", jsonObject.optString("chanId"));
-                }
-            } catch (Exception ex) {
-                Log.e("OUTPUT", ex.getMessage());
-            }
-        } else {
-            try {
-                String tick = txt.replaceAll("[\\[\\]]", "");
-                String[] data = tick.split(",");
-                if (!data[1].equalsIgnoreCase("\"hb\"")) {
-                    input.get(0).putOpt("ltp", data[7]);
-                    input.get(0).putOpt("pc", data[6]);
+    private void startSockets() {
+        getActivity().registerReceiver(receiver, new IntentFilter("CustomWebSocket"));
+        ws = new CustomWebSocket(getContext(), "wss://api.bitfinex.com/ws/2");
+        ws.start();
+    }
 
-                    final JSONObject finalLastPrice = input.get(0);
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mAdapter.update(0, finalLastPrice);
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String msg = intent.getStringExtra("data");
+            Log.d("ASD", msg);
+            if (msg.equalsIgnoreCase("{\"event\":\"info\",\"version\":2}")) {
+                ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"symbol\":\"tBTCUSD\"}");
+                ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"symbol\":\"tETHUSD\"}");
+            } else {
+                if (msg.startsWith("{")) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(msg);
+                        if (jsonObject.optString("event").equalsIgnoreCase("subscribed")) {
+                            int id = 0;
+                            switch (jsonObject.optString("symbol")) {
+                                case "tBTCUSD":
+                                    id = 0;
+                                    break;
+                                case "tETHUSD":
+                                    id = 1;
+                                    break;
+                            }
+                            input.get(id).put("symbol", jsonObject.optString("symbol"));
+                            input.get(id).put("chanId", jsonObject.optString("chanId"));
+                            channelMapper.put(jsonObject.optString("chanId"), id);
                         }
-                    });
+                    } catch (Exception ex) {
+                        Log.e("OUTPUT", ex.getMessage());
+                    }
+                } else {
+                    try {
+                        String tick = msg.replaceAll("[\\[\\]]", "");
+                        String[] data = tick.split(",");
+                        if (!data[1].equalsIgnoreCase("\"hb\"")) {
+                            final int position = channelMapper.get(data[0]);
+                            input.get(position).put("ltp", data[7]);
+                            input.get(position).put("pc", data[6]);
+
+                            final JSONObject finalLastPrice = input.get(position);
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mAdapter.update(position, finalLastPrice);
+                                }
+                            });
+                        }
+                    } catch (Exception ex) {
+                        Log.e("OUTPUT", ex.getMessage());
+                    }
                 }
-            } catch (Exception ex) {
-                Log.e("OUTPUT", ex.getMessage());
             }
         }
-    }
+    };
 }
