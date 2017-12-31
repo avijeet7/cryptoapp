@@ -70,7 +70,7 @@ public class CustomWebSocket extends Thread {
 
         @Override
         public void onFailure(WebSocket webSocket, Throwable t, okhttp3.Response response) {
-            Log.d("TICK: ", t.getMessage());
+            Log.d("TICK: ", "Failure!");
         }
     }
 }
