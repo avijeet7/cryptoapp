@@ -16,10 +16,9 @@ import aviapps.cryptosentiment.R;
 
 public class CustomPagerAdapter extends PagerAdapter {
 
-    Context mContext;
-    LayoutInflater mLayoutInflater;
+    private LayoutInflater mLayoutInflater;
 
-    int[] mResources = {
+    private int[] mResources = {
             R.drawable.ic_overview,
             R.drawable.ic_store,
             R.drawable.ic_sentiment,
@@ -27,8 +26,7 @@ public class CustomPagerAdapter extends PagerAdapter {
     };
 
     public CustomPagerAdapter(Context context) {
-        mContext = context;
-        mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
