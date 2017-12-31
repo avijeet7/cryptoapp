@@ -7,7 +7,6 @@ package aviapps.cryptosentiment.GetSet;
 public class GetSetStream {
     private double ltp = -1;
     private double pc = -1;
-    private String symbol = "";
     private String pair = "";
     private int chanId = -1;
 
@@ -25,14 +24,6 @@ public class GetSetStream {
 
     public void setPc(double pc) {
         this.pc = pc;
-    }
-
-    public String getSymbol() {
-        return symbol;
-    }
-
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
     }
 
     public int getChanId() {

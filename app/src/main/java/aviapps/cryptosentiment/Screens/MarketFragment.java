@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ import aviapps.cryptosentiment.R;
 
 public class MarketFragment extends Fragment {
 
-    private HashMap<String, Integer> channelMapper;
+    private HashMap<Integer, Integer> channelMapper;
     private RecyclerView recyclerView;
     private RVCryptoAdapter mAdapter;
     private List<GetSetStream> input;
@@ -99,7 +100,7 @@ public class MarketFragment extends Fragment {
 
     private void startSockets() {
         getActivity().registerReceiver(receiver, new IntentFilter("CustomWebSocket"));
-        ws = new CustomWebSocket(getContext(), "wss://api.bitfinex.com/ws/2");
+        ws = new CustomWebSocket(getContext(), "wss://api.bitfinex.com/ws/");
         ws.start();
     }
 
@@ -108,59 +109,53 @@ public class MarketFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             String msg = intent.getStringExtra("data");
             Log.d("ASD", msg);
-            if (msg.equalsIgnoreCase("{\"event\":\"info\",\"version\":2}")) {
-                ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"symbol\":\"tBTCUSD\"}");
-                ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"symbol\":\"tETHUSD\"}");
-                ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"symbol\":\"tLTCUSD\"}");
-                ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"symbol\":\"tXRPUSD\"}");
-                ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"symbol\":\"tXMRUSD\"}");
-                ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"symbol\":\"tIOTAUSD\"}");
-                ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"symbol\":\"tQTMUSD\"}");
+            if (msg.equalsIgnoreCase("{\"event\":\"info\",\"version\":1.1}")) {
+                ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"pair\":\"BTCUSD\"}");
+                ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"pair\":\"ETHUSD\"}");
+                ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"pair\":\"LTCUSD\"}");
+                ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"pair\":\"XRPUSD\"}");
+                ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"pair\":\"XMRUSD\"}");
+                ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"pair\":\"IOTAUSD\"}");
+                ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"pair\":\"QTMUSD\"}");
             } else {
                 if (msg.startsWith("{")) {
                     try {
                         JSONObject jsonObject = new JSONObject(msg);
                         if (jsonObject.optString("event").equalsIgnoreCase("subscribed")) {
                             GetSetStream row = new GetSetStream();
-                            row.setChanId(jsonObject.optInt("chanId", -1));
-                            row.setSymbol(jsonObject.optString("symbol", ""));
-                            row.setPair(jsonObject.optString("pair", ""));
+                            row.setChanId(jsonObject.optInt("chanId"));
+                            row.setPair(jsonObject.optString("pair"));
                             row.setLtp(-1);
                             row.setPc(-1);
 
                             input.add(row);
                             mAdapter.notifyDataSetChanged();
 
-                            int position = -1;
-                            for (int i=0; i<input.size(); i++) {
-                                if (input.get(i).getSymbol().equalsIgnoreCase(jsonObject.optString("symbol")))
-                                    position = i;
+                            for (int i = 0; i < input.size(); i++)
+                                if (input.get(i).getPair().equalsIgnoreCase(jsonObject.optString("pair")))
+                                    channelMapper.put(jsonObject.optInt("chanId"), i);
+
+                        }
+                    } catch (Exception ex) {
+                        Log.e("OUTPUT", ex.getMessage());
+                    }
+                } else if (msg.startsWith("[")) try {
+                    JSONArray jarray = new JSONArray(msg);
+                    if (!jarray.getString(1).equalsIgnoreCase("hb")) {
+                        final int position = channelMapper.get(jarray.getInt(0));
+                        GetSetStream lastUpdate = input.get(position);
+                        lastUpdate.setLtp(jarray.getDouble(7));
+                        lastUpdate.setPc(jarray.getDouble(6) * 100);
+                        final GetSetStream finalLastUpdate = lastUpdate;
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mAdapter.update(position, finalLastUpdate);
                             }
-                            channelMapper.put(jsonObject.optString("chanId"), position);
-                        }
-                    } catch (Exception ex) {
-                        Log.e("OUTPUT", ex.getMessage());
+                        });
                     }
-                } else {
-                    try {
-                        String tick = msg.replaceAll("[\\[\\]]", "");
-                        String[] data = tick.split(",");
-                        if (!data[1].equalsIgnoreCase("\"hb\"")) {
-                            final int position = channelMapper.get(data[0]);
-                            GetSetStream lastUpdate = input.get(position);
-                            lastUpdate.setLtp(Double.valueOf(data[7]));
-                            lastUpdate.setPc(Double.valueOf(data[6]) * 100);
-                            final GetSetStream finalLastUpdate = lastUpdate;
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mAdapter.update(position, finalLastUpdate);
-                                }
-                            });
-                        }
-                    } catch (Exception ex) {
-                        Log.e("OUTPUT", ex.getMessage());
-                    }
+                } catch (Exception ex) {
+                    Log.e("OUTPUT", ex.getMessage());
                 }
             }
         }

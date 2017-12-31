@@ -65,7 +65,7 @@ public class RVCryptoAdapter extends RecyclerView.Adapter<RVCryptoAdapter.ViewHo
         holder.txtHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                remove(position);
+//                remove(position);
             }
         });
 
