@@ -12,6 +12,6 @@
         android:text="Overview page is in development, please check the Markets screen!"
         android:textAlignment="center"
         android:textColor="@color/colorTextLight"
-        android:textSize="18dp" />
+        android:textSize="18sp" />
 
 </LinearLayout>

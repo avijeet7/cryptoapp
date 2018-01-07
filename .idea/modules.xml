@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://D:\Android\cryptoapp\CryptoSentiment.iml" filepath="D:\Android\cryptoapp\CryptoSentiment.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CryptoSentiment.iml" filepath="$PROJECT_DIR$/CryptoSentiment.iml" />
+      <module fileurl="file://C:\Users\avije\Desktop\Projects\CryptoApp\CryptoSentiment\cryptoapp\CryptoSentiment.iml" filepath="C:\Users\avije\Desktop\Projects\CryptoApp\CryptoSentiment\cryptoapp\CryptoSentiment.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cryptoapp.iml" filepath="$PROJECT_DIR$/cryptoapp.iml" />
+      <module fileurl="file://C:\Users\avije\Desktop\Projects\CryptoApp\CryptoSentiment\cryptoapp.iml" filepath="C:\Users\avije\Desktop\Projects\CryptoApp\CryptoSentiment\cryptoapp.iml" />
     </modules>
   </component>
 </project>
