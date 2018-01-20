@@ -5,10 +5,12 @@ package aviapps.cryptosentiment.GetSet;
  */
 
 public class GetSetStream {
-    private double ltp = -1;
-    private double pc = -1;
-    private String pair = "";
-    private int chanId = -1;
+    private double ltp;
+    private double pc;
+    private String pair;
+    private int chanId;
+    private double ask;
+    private double bid;
 
     public double getLtp() {
         return ltp;
@@ -40,5 +42,21 @@ public class GetSetStream {
 
     public void setPair(String pair) {
         this.pair = pair;
+    }
+
+    public double getAsk() {
+        return ask;
+    }
+
+    public void setAsk(double ask) {
+        this.ask = ask;
+    }
+
+    public double getBid() {
+        return bid;
+    }
+
+    public void setBid(double bid) {
+        this.bid = bid;
     }
 }
