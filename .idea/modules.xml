@@ -3,9 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CryptoSentiment.iml" filepath="$PROJECT_DIR$/CryptoSentiment.iml" />
-      <module fileurl="file://C:\Users\avije\Desktop\Projects\CryptoApp\CryptoSentiment\cryptoapp\CryptoSentiment.iml" filepath="C:\Users\avije\Desktop\Projects\CryptoApp\CryptoSentiment\cryptoapp\CryptoSentiment.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\avije\Desktop\Projects\CryptoApp\CryptoSentiment\cryptoapp.iml" filepath="C:\Users\avije\Desktop\Projects\CryptoApp\CryptoSentiment\cryptoapp.iml" />
     </modules>
   </component>
 </project>

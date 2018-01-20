@@ -24,8 +24,8 @@ public class MainActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         // load the store fragment by default
-        toolbar = getSupportActionBar();
-        toolbar.setTitle("Overview");
+//        toolbar = getSupportActionBar();
+//        toolbar.setTitle("Overview");
         loadFragment(new OverviewFragment());
     }
 
@@ -37,22 +37,22 @@ public class MainActivity extends AppCompatActivity {
             Fragment fragment;
             switch (item.getItemId()) {
                 case R.id.navigation_overview:
-                    toolbar.setTitle("Overview");
+//                    toolbar.setTitle("Overview");
                     fragment = new OverviewFragment();
                     loadFragment(fragment);
                     return true;
                 case R.id.navigation_market:
-                    toolbar.setTitle("Market");
+//                    toolbar.setTitle("Market");
                     fragment = new MarketFragment();
                     loadFragment(fragment);
                     return true;
                 case R.id.navigation_sentiment:
-                    toolbar.setTitle("Sentiment");
+//                    toolbar.setTitle("Sentiment");
 //                    fragment = new CartFragment();
 //                    loadFragment(fragment);
                     return true;
                 case R.id.navigation_profile:
-                    toolbar.setTitle("Profile");
+//                    toolbar.setTitle("Profile");
 //                    fragment = new ProfileFragment();
 //                    loadFragment(fragment);
                     return true;
