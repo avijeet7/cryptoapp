@@ -32,8 +32,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import aviapps.cryptosentiment.Custom.BitfinexRecyclerViewAdapter;
 import aviapps.cryptosentiment.Custom.CustomWebSocket;
-import aviapps.cryptosentiment.Custom.RVCryptoAdapter;
 import aviapps.cryptosentiment.GetSet.GetSetStream;
 import aviapps.cryptosentiment.R;
 
@@ -41,7 +41,7 @@ public class MktTab1 extends Fragment {
 
     private HashMap<Integer, Integer> channelMapper;
     private RecyclerView recyclerView;
-    private RVCryptoAdapter mAdapter;
+    private BitfinexRecyclerViewAdapter mAdapter;
     private List<GetSetStream> input;
     private CustomWebSocket ws;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -63,7 +63,7 @@ public class MktTab1 extends Fragment {
         input = new ArrayList<>();
         channelMapper = new HashMap<>();
 
-        mAdapter = new RVCryptoAdapter(input, getContext());
+        mAdapter = new BitfinexRecyclerViewAdapter(input, getContext());
         recyclerView.setAdapter(mAdapter);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

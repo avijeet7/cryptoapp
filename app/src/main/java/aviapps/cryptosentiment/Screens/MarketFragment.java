@@ -13,9 +13,9 @@ import android.view.ViewGroup;
 import java.util.HashMap;
 import java.util.List;
 
+import aviapps.cryptosentiment.Custom.BitfinexRecyclerViewAdapter;
 import aviapps.cryptosentiment.Custom.CustomWebSocket;
 import aviapps.cryptosentiment.Custom.MarketPagerAdapter;
-import aviapps.cryptosentiment.Custom.RVCryptoAdapter;
 import aviapps.cryptosentiment.GetSet.GetSetStream;
 import aviapps.cryptosentiment.R;
 
@@ -27,7 +27,7 @@ public class MarketFragment extends Fragment {
 
     private HashMap<Integer, Integer> channelMapper;
     private RecyclerView recyclerView;
-    private RVCryptoAdapter mAdapter;
+    private BitfinexRecyclerViewAdapter mAdapter;
     private List<GetSetStream> input;
     private CustomWebSocket ws;
     private SwipeRefreshLayout mSwipeRefreshLayout;

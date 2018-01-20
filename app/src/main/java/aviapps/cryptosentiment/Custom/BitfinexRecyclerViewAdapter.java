@@ -19,12 +19,12 @@ import aviapps.cryptosentiment.R;
  * Created by Avijeet on 30-Dec-17.
  */
 
-public class RVCryptoAdapter extends RecyclerView.Adapter<RVCryptoAdapter.ViewHolder> {
+public class BitfinexRecyclerViewAdapter extends RecyclerView.Adapter<BitfinexRecyclerViewAdapter.ViewHolder> {
     private List<GetSetStream> values;
     private Context context;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public RVCryptoAdapter(List<GetSetStream> myData, Context context) {
+    public BitfinexRecyclerViewAdapter(List<GetSetStream> myData, Context context) {
         values = myData;
         this.context = context;
     }
@@ -46,7 +46,7 @@ public class RVCryptoAdapter extends RecyclerView.Adapter<RVCryptoAdapter.ViewHo
 
     // Create new views (invoked by the layout manager)
     @Override
-    public RVCryptoAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BitfinexRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View v = inflater.inflate(R.layout.listview, parent, false);
@@ -91,9 +91,16 @@ public class RVCryptoAdapter extends RecyclerView.Adapter<RVCryptoAdapter.ViewHo
         // Handling special cases
         if (img_name.equalsIgnoreCase("qtm")) {
             img_name = "qtum";
+        } else if (img_name.equalsIgnoreCase("dsh")) {
+            img_name = "dash";
+        } else if (img_name.equalsIgnoreCase("iot")) {
+            img_name = "miota";
         }
 
         int id = context.getResources().getIdentifier(img_name, "drawable", context.getPackageName());
+
+        if (id == 0)
+            id = context.getResources().getIdentifier("usd", "drawable", context.getPackageName());
 
         holder.iv_main.setImageResource(id);
         holder.txtFooter.setText("bitfinex");
