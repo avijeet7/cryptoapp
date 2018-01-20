@@ -53,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_profile:
 //                    toolbar.setTitle("Profile");
-//                    fragment = new ProfileFragment();
-//                    loadFragment(fragment);
+                    fragment = new ProfileFragment();
+                    loadFragment(fragment);
                     return true;
             }
 

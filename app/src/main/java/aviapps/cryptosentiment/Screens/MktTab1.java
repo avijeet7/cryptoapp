@@ -130,7 +130,7 @@ public class MktTab1 extends Fragment {
                             for (int i = 0; i < input.size(); i++)
                                 if (input.get(i).getPair().equalsIgnoreCase(jsonObject.optString("pair")))
                                     channelMapper.put(jsonObject.optInt("chanId"), i);
-
+                            onItemsLoadComplete();
                         }
                     } catch (Exception ex) {
                         Log.e("OUTPUT", ex.getMessage());
@@ -154,7 +154,6 @@ public class MktTab1 extends Fragment {
                     Log.e("OUTPUT", ex.getMessage());
                 }
             }
-            onItemsLoadComplete();
         }
     };
 }
