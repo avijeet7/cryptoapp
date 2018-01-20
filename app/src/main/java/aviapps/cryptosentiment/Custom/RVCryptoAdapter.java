@@ -99,6 +99,8 @@ public class RVCryptoAdapter extends RecyclerView.Adapter<RVCryptoAdapter.ViewHo
         holder.txtFooter.setText("bitfinex");
         holder.tv_ltp.setText("$ " + ltpformat.format(object.getLtp()));
         holder.tv_pc.setText(df.format(object.getPc()) + " %");
+
+        holder.setIsRecyclable(false);
     }
 
     // Return the size of your dataset (invoked by the layout manager)

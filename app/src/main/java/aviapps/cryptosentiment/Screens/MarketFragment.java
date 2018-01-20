@@ -49,9 +49,9 @@ public class MarketFragment extends Fragment {
         tabLayout.setupWithViewPager(viewPager);
 
         MarketPagerAdapter pagerAdapter = new MarketPagerAdapter(getChildFragmentManager());
-        pagerAdapter.addFragment(new MktTab1(), "Coindelta");
-        pagerAdapter.addFragment(new MktTab2(), "Koinex");
-        pagerAdapter.addFragment(new MktTab3(), "Bitfinex");
+        pagerAdapter.addFragment(new MktTab1(), "Bitfinex");
+        pagerAdapter.addFragment(new MktTab2(), "Coindelta");
+        pagerAdapter.addFragment(new MktTab3(), "Koinex");
         viewPager.setAdapter(pagerAdapter);
     }
 
