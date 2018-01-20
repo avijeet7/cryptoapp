@@ -48,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_sentiment:
 //                    toolbar.setTitle("Sentiment");
-//                    fragment = new CartFragment();
-//                    loadFragment(fragment);
+                    fragment = new SentimentFragment();
+                    loadFragment(fragment);
                     return true;
                 case R.id.navigation_profile:
 //                    toolbar.setTitle("Profile");
