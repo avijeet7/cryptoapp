@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         loadKoinexData();
     }
 
-    private void loadBitfinexData() {
+    public void loadBitfinexData() {
         String url = "https://api.bitfinex.com/v1/symbols";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
-    private void loadCoindeltaData() {
+    public void loadCoindeltaData() {
         String url = "https://coindelta.com/api/v1/public/getticker/";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
-    private void loadKoinexData() {
+    public void loadKoinexData() {
         String url = "https://koinex.in/api/ticker";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {

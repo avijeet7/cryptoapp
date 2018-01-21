@@ -32,7 +32,7 @@ import aviapps.cryptosentiment.Custom.CustomWebSocket;
 import aviapps.cryptosentiment.GetSet.GetSetStream;
 import aviapps.cryptosentiment.R;
 
-public class MktTab1 extends Fragment {
+public class MktTabBitfinex extends Fragment {
 
     private HashMap<Integer, Integer> channelMapper;
     private RecyclerView recyclerView;
@@ -88,9 +88,12 @@ public class MktTab1 extends Fragment {
     }
 
     void refreshItems() {
-        if (input != null)
+        try {
             input.clear();
-        startSockets();
+            startSockets();
+        } catch (Exception ex) {
+            Log.e("Tab1", ex.getMessage());
+        }
     }
 
     void onItemsLoadComplete() {

@@ -14,27 +14,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import aviapps.cryptosentiment.Common.StatMethod;
-import aviapps.cryptosentiment.Custom.CoindeltaRecyclerViewAdapter;
+import aviapps.cryptosentiment.Custom.KoinexRecyclerViewAdapter;
 import aviapps.cryptosentiment.GetSet.GetSetStream;
 import aviapps.cryptosentiment.R;
 
-public class MktTab2 extends Fragment {
+public class MktTabKoinex extends Fragment {
 
     private RecyclerView recyclerView;
-    private CoindeltaRecyclerViewAdapter mAdapter;
+    private KoinexRecyclerViewAdapter mAdapter;
     private List<GetSetStream> input;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.mkt_tab_2, container, false);
+        View view = inflater.inflate(R.layout.mkt_tab_3, container, false);
         recyclerView = view.findViewById(R.id.rv_crypto);
         mSwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         init();
@@ -47,7 +47,7 @@ public class MktTab2 extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         input = new ArrayList<>();
 
-        mAdapter = new CoindeltaRecyclerViewAdapter(input, getContext());
+        mAdapter = new KoinexRecyclerViewAdapter(input, getContext());
         recyclerView.setAdapter(mAdapter);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -75,25 +75,30 @@ public class MktTab2 extends Fragment {
     }
 
     private void getDataVolleyCall() {
-        String data = StatMethod.getStrPref(getContext(), "ExchData", "coindelta");
+        if (input != null)
+            input.clear();
+        String data = StatMethod.getStrPref(getContext(), "ExchData", "koinex");
         try {
-            JSONArray jsonArray = new JSONArray(data);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                if (jsonObject.optString("MarketName").contains("inr")) {
-                    GetSetStream row = new GetSetStream();
-                    row.setPair(jsonObject.optString("MarketName"));
-                    row.setLtp(jsonObject.optDouble("Last"));
-                    row.setBid(jsonObject.optDouble("Bid"));
-                    row.setAsk(jsonObject.optDouble("Ask"));
+            JSONObject jsonObject = new JSONObject(data);
+            JSONObject newJsonObject = jsonObject.getJSONObject("stats");
+            Iterator<?> keys = newJsonObject.keys();
 
+            while (keys.hasNext()) {
+                String key = (String) keys.next();
+                if (newJsonObject.get(key) instanceof JSONObject) {
+                    GetSetStream row = new GetSetStream();
+                    row.setPair(key);
+                    row.setLtp(newJsonObject.getJSONObject(key).optDouble("last_traded_price"));
+                    row.setBid(newJsonObject.getJSONObject(key).optDouble("highest_bid"));
+                    row.setAsk(newJsonObject.getJSONObject(key).optDouble("lowest_ask"));
                     input.add(row);
                 }
             }
             mAdapter.notifyDataSetChanged();
+            mSwipeRefreshLayout.setRefreshing(false);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }
+
