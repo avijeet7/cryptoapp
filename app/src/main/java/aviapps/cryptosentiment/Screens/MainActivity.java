@@ -1,6 +1,7 @@
 package aviapps.cryptosentiment.Screens;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -135,5 +136,38 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         queue.add(stringRequest);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startTimer();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopTimer();
+    }
+
+    Handler handler = new Handler();
+    int delay = 10000;
+    Runnable runnable;
+
+    private void startTimer() {
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                loadCoindeltaData();
+                loadKoinexData();
+                runnable = this;
+                handler.postDelayed(runnable, delay);
+            }
+        }, delay);
+    }
+
+    private void stopTimer() {
+        if (runnable != null) {
+            handler.removeCallbacks(runnable);
+        }
     }
 }
