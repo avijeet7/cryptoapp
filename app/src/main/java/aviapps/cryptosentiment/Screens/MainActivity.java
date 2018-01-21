@@ -84,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
     private void loadStatData() {
         queue = Volley.newRequestQueue(this);
         loadBitfinexData();
+        loadCoindeltaData();
+        loadKoinexData();
     }
 
     private void loadBitfinexData() {
@@ -93,6 +95,40 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         StatMethod.savePrefs(getApplicationContext(), "ExchData", "bitfinex", response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("ASD", "SSS");
+            }
+        });
+        queue.add(stringRequest);
+    }
+
+    private void loadCoindeltaData() {
+        String url = "https://coindelta.com/api/v1/public/getticker/";
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        StatMethod.savePrefs(getApplicationContext(), "ExchData", "coindelta", response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("ASD", "SSS");
+            }
+        });
+        queue.add(stringRequest);
+    }
+
+    private void loadKoinexData() {
+        String url = "https://koinex.in/api/ticker";
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        StatMethod.savePrefs(getApplicationContext(), "ExchData", "koinex", response);
                     }
                 }, new Response.ErrorListener() {
             @Override

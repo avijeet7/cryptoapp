@@ -14,11 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -27,6 +23,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import aviapps.cryptosentiment.Common.StatMethod;
 import aviapps.cryptosentiment.Custom.CoindeltaRecyclerViewAdapter;
 import aviapps.cryptosentiment.GetSet.GetSetStream;
 import aviapps.cryptosentiment.R;
@@ -84,36 +81,25 @@ public class MktTab2 extends Fragment {
     }
 
     private void getDataVolleyCall() {
-        String url = "https://coindelta.com/api/v1/public/getticker/";
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONArray jsonArray = new JSONArray(response);
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                if (jsonObject.optString("MarketName").contains("inr")) {
-                                    GetSetStream row = new GetSetStream();
-                                    row.setPair(jsonObject.optString("MarketName"));
-                                    row.setLtp(jsonObject.optDouble("Last"));
-                                    row.setBid(jsonObject.optDouble("Bid"));
-                                    row.setAsk(jsonObject.optDouble("Ask"));
+        String data = StatMethod.getStrPref(getContext(), "ExchData", "coindelta");
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                if (jsonObject.optString("MarketName").contains("inr")) {
+                    GetSetStream row = new GetSetStream();
+                    row.setPair(jsonObject.optString("MarketName"));
+                    row.setLtp(jsonObject.optDouble("Last"));
+                    row.setBid(jsonObject.optDouble("Bid"));
+                    row.setAsk(jsonObject.optDouble("Ask"));
 
-                                    input.add(row);
-                                }
-                            }
-                            mAdapter.notifyDataSetChanged();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("ASD", "SSS");
+                    input.add(row);
+                }
             }
-        });
-        queue.add(stringRequest);
+            mAdapter.notifyDataSetChanged();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

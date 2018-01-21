@@ -14,11 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
@@ -27,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import aviapps.cryptosentiment.Common.StatMethod;
 import aviapps.cryptosentiment.Custom.KoinexRecyclerViewAdapter;
 import aviapps.cryptosentiment.GetSet.GetSetStream;
 import aviapps.cryptosentiment.R;
@@ -84,39 +81,27 @@ public class MktTab3 extends Fragment {
     }
 
     private void getDataVolleyCall() {
-        String url = "https://koinex.in/api/ticker";
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            JSONObject newJsonObject = jsonObject.getJSONObject("stats");
-                            Iterator<?> keys = newJsonObject.keys();
+        String data = StatMethod.getStrPref(getContext(), "ExchData", "koinex");
+        try {
+            JSONObject jsonObject = new JSONObject(data);
+            JSONObject newJsonObject = jsonObject.getJSONObject("stats");
+            Iterator<?> keys = newJsonObject.keys();
 
-                            while (keys.hasNext()) {
-                                String key = (String) keys.next();
-                                if (newJsonObject.get(key) instanceof JSONObject) {
-                                    GetSetStream row = new GetSetStream();
-                                    row.setPair(key);
-                                    row.setLtp(newJsonObject.getJSONObject(key).optDouble("last_traded_price"));
-                                    row.setBid(newJsonObject.getJSONObject(key).optDouble("highest_bid"));
-                                    row.setAsk(newJsonObject.getJSONObject(key).optDouble("lowest_ask"));
-                                    input.add(row);
-                                }
-                            }
-                            mAdapter.notifyDataSetChanged();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("ASD", "SSS");
+            while (keys.hasNext()) {
+                String key = (String) keys.next();
+                if (newJsonObject.get(key) instanceof JSONObject) {
+                    GetSetStream row = new GetSetStream();
+                    row.setPair(key);
+                    row.setLtp(newJsonObject.getJSONObject(key).optDouble("last_traded_price"));
+                    row.setBid(newJsonObject.getJSONObject(key).optDouble("highest_bid"));
+                    row.setAsk(newJsonObject.getJSONObject(key).optDouble("lowest_ask"));
+                    input.add(row);
+                }
             }
-        });
-        queue.add(stringRequest);
+            mAdapter.notifyDataSetChanged();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
 
