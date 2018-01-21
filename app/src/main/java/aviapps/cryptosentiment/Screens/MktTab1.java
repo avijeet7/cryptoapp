@@ -4,6 +4,7 @@ package aviapps.cryptosentiment.Screens;
  * Created by Avijeet on 20-Jan-18.
  */
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -49,6 +50,7 @@ public class MktTab1 extends Fragment {
         return view;
     }
 
+    @SuppressLint("UseSparseArrays")
     private void init() {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());

@@ -14,9 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
-
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -34,7 +31,6 @@ public class MktTab3 extends Fragment {
     private KoinexRecyclerViewAdapter mAdapter;
     private List<GetSetStream> input;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RequestQueue queue;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,8 +56,6 @@ public class MktTab3 extends Fragment {
                 getDataVolleyCall();
             }
         });
-
-        queue = Volley.newRequestQueue(getActivity());
     }
 
     @Override

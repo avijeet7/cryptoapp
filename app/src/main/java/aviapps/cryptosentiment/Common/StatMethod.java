@@ -3,16 +3,15 @@ package aviapps.cryptosentiment.Common;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-/**
- * Created by avije on 21-Jan-18.
+/*
+ * Created by Avijeet on 21-Jan-18.
  */
 
 public class StatMethod {
 
     private static SharedPreferences getSharedPref(Context context, String filename) {
         try {
-            SharedPreferences pref = context.getSharedPreferences(filename, Context.MODE_MULTI_PROCESS);
-            return pref;
+            return context.getSharedPreferences(filename, Context.MODE_MULTI_PROCESS);
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
@@ -23,7 +22,7 @@ public class StatMethod {
         try {
             SharedPreferences.Editor editor = getSharedPref(context, filename).edit();
             editor.putString(key, value);
-            editor.commit();
+            editor.apply();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

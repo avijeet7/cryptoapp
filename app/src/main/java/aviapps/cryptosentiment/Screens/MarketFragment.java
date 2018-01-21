@@ -4,19 +4,11 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.HashMap;
-import java.util.List;
-
-import aviapps.cryptosentiment.Custom.BitfinexRecyclerViewAdapter;
-import aviapps.cryptosentiment.Custom.CustomWebSocket;
 import aviapps.cryptosentiment.Custom.MarketPagerAdapter;
-import aviapps.cryptosentiment.GetSet.GetSetStream;
 import aviapps.cryptosentiment.R;
 
 /*
@@ -24,13 +16,6 @@ import aviapps.cryptosentiment.R;
  */
 
 public class MarketFragment extends Fragment {
-
-    private HashMap<Integer, Integer> channelMapper;
-    private RecyclerView recyclerView;
-    private BitfinexRecyclerViewAdapter mAdapter;
-    private List<GetSetStream> input;
-    private CustomWebSocket ws;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public MarketFragment() {
     }
@@ -44,8 +29,8 @@ public class MarketFragment extends Fragment {
     }
 
     private void init(View view) {
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.mkt_pager);
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
+        ViewPager viewPager = view.findViewById(R.id.mkt_pager);
+        TabLayout tabLayout = view.findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
 
         MarketPagerAdapter pagerAdapter = new MarketPagerAdapter(getChildFragmentManager());
