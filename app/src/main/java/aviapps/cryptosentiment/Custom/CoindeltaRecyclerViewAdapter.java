@@ -57,7 +57,7 @@ public class CoindeltaRecyclerViewAdapter extends RecyclerView.Adapter<Coindelta
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         final GetSetStream object = values.get(position);
@@ -66,6 +66,12 @@ public class CoindeltaRecyclerViewAdapter extends RecyclerView.Adapter<Coindelta
             @Override
             public void onClick(View v) {
 //                remove(position);
+            }
+        });
+        holder.tv_pc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.tv_pc.setSelected(true);
             }
         });
 
