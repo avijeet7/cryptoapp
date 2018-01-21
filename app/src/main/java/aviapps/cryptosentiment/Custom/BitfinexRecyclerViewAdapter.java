@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import aviapps.cryptosentiment.Common.StatMethod;
 import aviapps.cryptosentiment.GetSet.GetSetStream;
 import aviapps.cryptosentiment.R;
 
@@ -104,7 +105,7 @@ public class BitfinexRecyclerViewAdapter extends RecyclerView.Adapter<BitfinexRe
 
         holder.iv_main.setImageResource(id);
         holder.txtFooter.setText("bitfinex");
-        holder.tv_ltp.setText("$ " + ltpformat.format(object.getLtp()));
+        holder.tv_ltp.setText("$ " + StatMethod.addCommas(ltpformat.format(object.getLtp())));
         holder.tv_pc.setText(df.format(object.getPc()) + " %");
 
 //        holder.setIsRecyclable(false);

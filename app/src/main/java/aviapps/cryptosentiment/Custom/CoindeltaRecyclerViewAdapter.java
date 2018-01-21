@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import aviapps.cryptosentiment.Common.StatMethod;
 import aviapps.cryptosentiment.GetSet.GetSetStream;
 import aviapps.cryptosentiment.R;
 
@@ -94,8 +95,9 @@ public class CoindeltaRecyclerViewAdapter extends RecyclerView.Adapter<Coindelta
 
         holder.iv_main.setImageResource(id);
         holder.txtFooter.setText("coindelta");
-        holder.tv_ltp.setText("₹ " + ltpformat.format(object.getLtp()));
-        holder.tv_pc.setText("₹ " + df.format(object.getBid()) + " : ₹ " + df.format(object.getAsk()));
+        holder.tv_ltp.setText("₹ " + StatMethod.addCommas(ltpformat.format(object.getLtp())));
+        holder.tv_pc.setText("₹ " + StatMethod.addCommas(ltpformat.format(object.getBid())) +
+                " : ₹ " + StatMethod.addCommas(ltpformat.format(object.getAsk())));
 
 //        holder.setIsRecyclable(false);
     }
