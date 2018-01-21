@@ -18,13 +18,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -32,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import aviapps.cryptosentiment.Common.StatMethod;
 import aviapps.cryptosentiment.Custom.BitfinexRecyclerViewAdapter;
 import aviapps.cryptosentiment.Custom.CustomWebSocket;
 import aviapps.cryptosentiment.GetSet.GetSetStream;
@@ -45,7 +39,6 @@ public class MktTab1 extends Fragment {
     private List<GetSetStream> input;
     private CustomWebSocket ws;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RequestQueue queue;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -72,8 +65,6 @@ public class MktTab1 extends Fragment {
                 refreshItems();
             }
         });
-
-        queue = Volley.newRequestQueue(getActivity());
     }
 
     @Override
@@ -117,7 +108,7 @@ public class MktTab1 extends Fragment {
             String msg = intent.getStringExtra("data");
             Log.d("ASD", msg);
             if (msg.equalsIgnoreCase("{\"event\":\"info\",\"version\":1.1}")) {
-                subscribePairs();
+                subscribePairsNew();
             } else {
                 if (msg.startsWith("{")) {
                     try {
@@ -156,37 +147,18 @@ public class MktTab1 extends Fragment {
         }
     };
 
-    private void subscribePairs() {
-        String url = "https://api.bitfinex.com/v1/symbols";
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONArray jsonArray = new JSONArray(response);
-                            for (int i=0; i<jsonArray.length(); i++) {
-                                String pair = jsonArray.getString(i);
-                                if (pair.contains("usd")) {
-                                    ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"pair\":\"" + pair + "\"}");
-                                }
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("ASD", "SSS");
+    private void subscribePairsNew() {
+        String data = StatMethod.getStrPref(getContext(), "ExchData", "bitfinex");
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            for (int i=0; i<jsonArray.length(); i++) {
+                String pair = jsonArray.getString(i);
+                if (pair.contains("usd")) {
+                    ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"pair\":\"" + pair + "\"}");
+                }
             }
-        });
-        queue.add(stringRequest);
-//        ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"pair\":\"BTCUSD\"}");
-//        ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"pair\":\"ETHUSD\"}");
-//        ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"pair\":\"LTCUSD\"}");
-//        ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"pair\":\"XRPUSD\"}");
-//        ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"pair\":\"XMRUSD\"}");
-//        ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"pair\":\"IOTAUSD\"}");
-//        ws.sendMessage("{\"event\":\"subscribe\",\"channel\":\"ticker\",\"pair\":\"QTMUSD\"}");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

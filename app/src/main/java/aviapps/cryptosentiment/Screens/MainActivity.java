@@ -7,13 +7,23 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import aviapps.cryptosentiment.Common.StatMethod;
 import aviapps.cryptosentiment.R;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActionBar toolbar;
+    private RequestQueue queue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         // load the store fragment by default
 //        toolbar = getSupportActionBar();
 //        toolbar.setTitle("Overview");
+        loadStatData();
         loadFragment(new OverviewFragment());
     }
 
@@ -68,5 +79,27 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.frame_container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    private void loadStatData() {
+        queue = Volley.newRequestQueue(this);
+        loadBitfinexData();
+    }
+
+    private void loadBitfinexData() {
+        String url = "https://api.bitfinex.com/v1/symbols";
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        StatMethod.savePrefs(getApplicationContext(), "ExchData", "bitfinex", response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("ASD", "SSS");
+            }
+        });
+        queue.add(stringRequest);
     }
 }
