@@ -93,7 +93,7 @@ public class KoinexRecyclerViewAdapter extends RecyclerView.Adapter<KoinexRecycl
             id = context.getResources().getIdentifier("_default", "drawable", context.getPackageName());
 
         holder.iv_main.setImageResource(id);
-        holder.txtFooter.setText("coindelta");
+        holder.txtFooter.setText("koinex");
         holder.tv_ltp.setText("₹ " + ltpformat.format(object.getLtp()));
         holder.tv_pc.setText("₹ " + df.format(object.getBid()) + " : ₹ " + df.format(object.getAsk()));
 
