@@ -95,7 +95,8 @@ public class MktTab1 extends Fragment {
     }
 
     void refreshItems() {
-        input.clear();
+        if (input != null)
+            input.clear();
         startSockets();
     }
 
