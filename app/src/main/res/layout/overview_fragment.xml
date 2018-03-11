@@ -2,16 +2,36 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorListViewBackgroundDark">
+    android:layout_weight="5"
+    android:background="@color/colorListViewBackgroundDark"
+    android:orientation="vertical">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="50dp"
-        android:text="Overview page is in development, please check the Markets screen!"
-        android:textAlignment="center"
-        android:textColor="@color/colorTextLight"
-        android:textSize="18sp" />
+        android:layout_height="match_parent"
+        android:layout_weight="2">
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/chart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorChartBackground" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="3">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="50dp"
+            android:text="Overview page is in development, please check the Markets screen!"
+            android:textAlignment="center"
+            android:textColor="@color/colorTextLight"
+            android:textSize="18sp" />
+    </LinearLayout>
 
 </LinearLayout>

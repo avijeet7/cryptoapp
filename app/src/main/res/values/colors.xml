@@ -8,4 +8,5 @@
     <color name="colorTextLight">#ffffff</color>
     <color name="colorPositiveGreen">#002300</color>
     <color name="colorNegativeRed">#350000</color>
+    <color name="colorChartBackground">#0e113b</color>
 </resources>

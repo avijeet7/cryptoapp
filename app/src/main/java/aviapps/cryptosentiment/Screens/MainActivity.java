@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     Handler handler = new Handler();
-    int delay = 10000;
+    int delay = 30000;
     Runnable runnable;
 
     private void startTimer() {
